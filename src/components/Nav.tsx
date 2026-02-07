@@ -85,7 +85,7 @@ function Nav({user}:{user:IUser}) {
              {user.role == "admin" && <form className='  hidden md:flex items-center
       absolute left-1/2 -translate-x-1/2
       bg-white rounded-full px-4 py-2
-      w-[320px] lg:w-[420px]
+      w-[320px] lg:w-105
       shadow-md'
        onSubmit={handleSearch}>
                 <Search className='text-gray-500 w-5 h-5 mr-2' />
@@ -95,6 +95,7 @@ function Nav({user}:{user:IUser}) {
                 
                 />
             </form>}
+            
 
 
 
