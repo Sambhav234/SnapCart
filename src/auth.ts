@@ -12,17 +12,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password:{label:"Password",type:"password"}
         },
         async authorize(credentials,request){
+             if (!credentials?.email || !credentials?.password) {
+                throw new Error("Missing credentials");
+                }
 
             await connectDB()
             const email=credentials.email
             const password=credentials.password as string
             const user=await User.findOne({email})
             if(!user){
+                console.log("User not EXIst")
                 throw new Error("User Does not Exist")
             }
 
             const isMatch=await bcrypt.compare(password,user.password)
             if(!isMatch){
+                console.log("User Does not Match")
                 throw new Error("Incorrect Password")
             }
 
@@ -102,7 +107,7 @@ async signIn({user,account}){
     maxAge:10*24*60*60*1000
     //10- dayss
   },
-  secret:process.env.AUTH_SECRET
+  secret:process.env.NEXTAUTH_SECRET
 })
 
 

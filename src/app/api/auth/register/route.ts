@@ -8,8 +8,11 @@ export async function POST(req:NextRequest) {
     try{
         await connectDB()
         const {name,email,password}=await req.json()
+        console.log(name,email,password)
+
         const existUser=await User.findOne({email})
         if(existUser){
+            console.log("User Exists")
            return NextResponse.json(
             {
                 message:"User with this email already exists"
@@ -21,6 +24,7 @@ export async function POST(req:NextRequest) {
         }
 
         if(password.length<6){
+            
             return NextResponse.json({message:"Password must be 6 digits long"},{status:400})
         }
         const hashedPassword=await bcrypt.hash(password,10)

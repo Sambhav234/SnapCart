@@ -151,7 +151,7 @@ function Login() {
           const formValidation = email !== "" && password !== "";
           return (
             <button
-              disabled={!formValidation && loading}
+              disabled={!formValidation || loading}
               className={`w-full font-semibold py-3 rounded-xl transition-all 
                         duration-200 shadow-md inline-flex items-center 
                         justify-center gap-2

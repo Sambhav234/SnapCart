@@ -40,11 +40,13 @@ function RegisterForm({ PrevStep }: Proptype) {
         email,
         password,
       });
+       console.log(result);
       router.push("/");
-      console.log(result.data);
       setLoading(false);
-    } catch (err) {
-      console.log(err);
+    } catch (err:any) {
+      console.log("AXIOS DATA :",err?.response.message);
+      console.log("AXIOS STATUS :",err?.response.status);
+
       setLoading(false);
     }
   };
@@ -169,7 +171,8 @@ function RegisterForm({ PrevStep }: Proptype) {
           const formValidation = name !== "" && email !== "" && password !== "";
           return (
             <button
-              disabled={!formValidation && loading}
+              type="submit"
+              disabled={!formValidation || loading}
               className={`w-full font-semibold py-3 rounded-xl transition-all 
                         duration-200 shadow-md inline-flex items-center 
                         justify-center gap-2

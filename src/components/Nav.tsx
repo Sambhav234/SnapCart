@@ -18,7 +18,7 @@ interface IUser{
 }
 function Nav({user}:{user:IUser}) {
     const [search,setSearch]=useState("")
-    const [open,setOpen]=useState(true)
+    const [open,setOpen]=useState(false)
     const profileDropDown=useRef<HTMLDivElement>(null)
     const [searchBarOpen,setSearchBarOpen]=useState(false)
 
@@ -59,6 +59,8 @@ function Nav({user}:{user:IUser}) {
 
     useEffect(()=>{
 
+
+
         const handleClickOutside=(e:MouseEvent)=>{
             if(profileDropDown.current && !profileDropDown.current.contains(e.target as Node)){
                 setOpen(false)
@@ -66,8 +68,8 @@ function Nav({user}:{user:IUser}) {
         }
 
 
-        document.addEventListener('mousedown',handleClickOutside)
-        return () => document.removeEventListener('mousedown',handleClickOutside)
+        document.addEventListener('click',handleClickOutside)
+        return () => document.removeEventListener('click',handleClickOutside)
     },[])
 
 
@@ -82,7 +84,7 @@ function Nav({user}:{user:IUser}) {
             {/* // SEARCH BAR */}
             {/* // role has to be changed */}
             
-             {user.role == "admin" && <form className='  hidden md:flex items-center
+             {user.role == "user" && <form className='  hidden md:flex items-center
       absolute left-1/2 -translate-x-1/2
       bg-white rounded-full px-4 py-2
       w-[320px] lg:w-105
@@ -111,7 +113,7 @@ function Nav({user}:{user:IUser}) {
         <div className='ml-auto flex items-center gap-6 md:gap-5 mr-3'>
 {/* 
             need to change admin ->user */}
-          {user.role == "admin" && <> <div className='bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:scale-105 transition md:hidden ' onClick={()=>setSearchBarOpen((prev)=>!prev)} >
+          {user.role == "user" && <> <div className='bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:scale-105 transition md:hidden ' onClick={()=>setSearchBarOpen((prev)=>!prev)} >
                     <Search className='text-green-600 w-6 h-6' />
                 </div>
 
@@ -125,9 +127,10 @@ function Nav({user}:{user:IUser}) {
             </div>
 
             {/* profileDropDown */}
+
             <div className='relative'  ref={profileDropDown}>
-                 <div className='bg-white rounded-full w-10 h-10 flex items-center justify-center overflow-hidden shadow-md hover:scale-105 transition-transform cursor-pointer' >
-                        {user.image ? <Image src={user.image} alt='user' fill className='object-cover rounded-full'  onClick={()=>setOpen(prev=>!prev)}/> : <User />}
+                 <div className='bg-white rounded-full w-10 h-10 flex items-center justify-center overflow-hidden shadow-md hover:scale-105 transition-transform cursor-pointer' onClick={()=>setOpen(prev=>!prev)}>
+                        {user.image ? <Image src={user.image} alt='user' fill className='object-cover rounded-full'  /> : <User />}
                 </div>
             <AnimatePresence>
                 { open &&
@@ -153,7 +156,7 @@ function Nav({user}:{user:IUser}) {
 
 
                             {/* // here need to change role to user from admin */}
-                           {user.role == "admin" && <Link href={"/user/my-orders"} className='flex items-center gap-2 px-3 py-3 hover:bg-green-50 rounded-lg text-gray-700 font-medium' onClick={() => setOpen(false)}>
+                           {user.role == "user" && <Link href={"/user/my-orders"} className='flex items-center gap-2 px-3 py-3 hover:bg-green-50 rounded-lg text-gray-700 font-medium' onClick={() => setOpen(false)}>
                             <Package className='w-5 h-5 text-green-600' />
                                                 My Orders
                             </Link>}
@@ -173,6 +176,7 @@ function Nav({user}:{user:IUser}) {
                     </motion.div>
                 }
             </AnimatePresence>
+              </div>
 
                   <AnimatePresence>
                         {searchBarOpen
@@ -199,7 +203,7 @@ function Nav({user}:{user:IUser}) {
                     </AnimatePresence>
 
 
-            </div>
+          
 
 
         </div>
