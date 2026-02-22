@@ -3,7 +3,14 @@ import React from "react";
 import { IGrocery } from "@/models/grocery.model";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { addToCart } from "@/redux/cartSlice";
+import { useSelector } from "react-redux";
+import { ShoppingCart } from "lucide-react";
 function GroceryItemCard({ item }: { item: IGrocery }) {
+  const dispatch = useDispatch<AppDispatch>();
+  const { cartData } = useSelector((state: RootState) => state.cart);
   return (
     <motion.div
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -31,6 +38,14 @@ function GroceryItemCard({ item }: { item: IGrocery }) {
         </span>
         <span className="text-green-700 font-bold text-lg">₹{item.price}</span>
       </div>
+      <motion.button
+        className="mt-4 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-full py-2 text-sm font-medium transition-all"
+        whileTap={{ scale: 0.96 }}
+        onClick={() => dispatch(addToCart({ ...item, quantity: 1 }))}
+      >
+        <ShoppingCart /> Add to Cart
+      </motion.button>
+      
     </motion.div>
   );
 }
