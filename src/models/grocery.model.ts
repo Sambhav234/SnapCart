@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IGrocery{
-    id?:mongoose.Types.ObjectId
+    id:mongoose.Types.ObjectId
     name:string
     image:string
     category:string
