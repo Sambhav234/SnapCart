@@ -5,9 +5,11 @@ import {motion, number} from "motion/react"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CheckoutMap from "./CheckoutMap";
+import axios from "axios";
 function CheckoutForm() {
   const {userData}=useSelector((state:RootState)=>state.user)
-
+  const [searchLoading,setSearchLoading]=useState(false)
+  const [searchQuery,setSearchQuery]=useState("")
   const [address,setAddress]=useState({
         fullName: "",
         mobile: "",
@@ -28,6 +30,28 @@ function CheckoutForm() {
     }
   },[])
 
+  // reverse geocoding using nominatim APi
+  useEffect(()=>{
+    const fetchAddress=async ()=>{
+      if(!position)return
+      try{
+        const result=await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${position[0]}&lon=${position[1]}&format=json`)
+        console.log(result.data)
+        setAddress(prev=>({...prev,
+          city:result.data.address.city,
+          state:result.data.address.state,
+          pincode:result.data.address.postcode,
+          fullAddress:result.data.display_name
+        }))
+      }catch(err){
+        console.log("Reverse Geocoding Error : ",err)
+      }
+    }
+    fetchAddress()
+  },[position])
+
+
+
   useEffect(()=>{
     if(userData){
       setAddress((prev)=>({...prev,fullName:userData?.name || ""}))
@@ -43,6 +67,25 @@ function CheckoutForm() {
             }, (err) => { console.log('location error', err) }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 })
         }
  }
+
+
+
+//handling location by searching it through
+// input ..making use of leaflet geosearch plugin
+ const handleSearchQuery=async ()=>{
+    setSearchLoading(true)
+    const {OpenStreetMapProvider}=await import("leaflet-geosearch")
+    const provider=new OpenStreetMapProvider()
+    const results=await provider.search({query:searchQuery});
+    if(results){
+      setSearchLoading(false)
+      console.log("Handle Query Results :",results)
+      setPosition([results[0].y,results[0].x])
+    }
+ }
+
+
+
 
 
 //   Component mounts
@@ -166,12 +209,12 @@ function CheckoutForm() {
             type="text"
             placeholder="search city or area..."
             className="flex-1 border rounded-lg p-3 text-sm focus:ring-2 focus:ring-green-500 outline-none"
-            // value={searchQuery}
-            // onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
             className="bg-green-600 text-white px-5 rounded-lg hover:bg-green-700 transition-all font-medium cursor-pointer"
-            // onClick={handleSearchQuery}
+            onClick={handleSearchQuery}
           >
             {0 ? (
               <Loader2 size={16} className="animate-spin" />
