@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CheckoutMap from "./CheckoutMap";
 import axios from "axios";
+import Checkout2 from "./Checkout2";
 function CheckoutForm() {
   const {userData}=useSelector((state:RootState)=>state.user)
   const [searchLoading,setSearchLoading]=useState(false)
@@ -162,6 +163,7 @@ function CheckoutForm() {
               className="absolute left-3 top-3 text-green-600"
               size={18}
             />
+            
             <input
               type="text"
               value={address.city}
@@ -225,7 +227,7 @@ function CheckoutForm() {
           </button>
         </div>
 
-        <div className="relative mt-6 h-[330px] rounded-xl overflow-hidden border border-gray-200 shadow-inner">
+        <div className="relative mt-6 h-82.5 rounded-xl overflow-hidden border border-gray-200 shadow-inner">
           {position && (
             <CheckoutMap position={position} setPosition={setPosition} />
           )}

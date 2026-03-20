@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import {motion} from "motion/react"
 import BackButton from '@/components/BackButton';
 import CheckoutForm from '@/components/CheckoutForm';
+import Checkout2 from '@/components/Checkout2';
 function Checkout() {
     const router=useRouter()
    return (
@@ -25,9 +26,11 @@ function Checkout() {
         transition={{duration:0.3}}
         className='bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100'
         >
-           <CheckoutForm/>
+         <CheckoutForm/>
 
         </motion.div>
+
+        <Checkout2/>
     </div>
 
     </div>
