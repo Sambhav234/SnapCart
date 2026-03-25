@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 
 interface IUser{
-    id?:mongoose.Types.ObjectId
+    _id?:mongoose.Types.ObjectId
     name:string
     email:string
     password?:string

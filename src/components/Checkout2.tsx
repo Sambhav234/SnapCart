@@ -3,11 +3,61 @@ import { motion } from "motion/react";
 import { CreditCard, CreditCardIcon, Truck } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import axios from "axios";
+import Grocery from "@/models/grocery.model";
+type Position=[number,number];
+
+interface PosProp{
+  position:Position|null
+}
+
+
 function Checkout2() {
+
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "online">("cod");
+  const {userData}=useSelector((state:RootState)=>state.user)
+
+
+  const handleCod=async ()=>{
+    if(!position){
+      return null
+    }
+    try{
+      console.log(position)
+      console.log(userData?._id)
+      const result=await axios.post('/api/user/order',{
+        userId:userData?._id,
+        items:cartData.map(item=>({
+          grocery:item._id, 
+          name:item.name,
+          price:item.price,
+          unit:item.unit,
+          quantity:item.quantity,
+          image:item.image
+
+        })),
+        totalAmount:finalTotal,
+        address:{
+          
+        }
+
+      })
+    }catch(err){
+
+      console.log("no position came")
+    }
+  }
+
+  const handleOnlinePayment=()=>{
+    
+  }
+
+
+
   const { subTotal, deliveryFee, finalTotal, cartData } = useSelector(
     (state: RootState) => state.cart,
   );
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -51,7 +101,9 @@ function Checkout2() {
       <motion.button
       
       className="w-full mt-6 bg-green-600 text-white py-3 rounded-full hover:bg-green-700 cursor-pointer font-semibold"
-
+      onClick={() =>
+        paymentMethod === "cod" ? handleCod() : handleOnlinePayment()
+      }
       >
         {paymentMethod=="cod"?"Place Order":"Pay & Place Order "}
       </motion.button>

@@ -1,12 +1,15 @@
 "use client"
 import React from 'react'
 import { useRouter } from 'next/navigation';
-import {motion} from "motion/react"
+import {motion, number} from "motion/react"
 import BackButton from '@/components/BackButton';
 import CheckoutForm from '@/components/CheckoutForm';
 import Checkout2 from '@/components/Checkout2';
+import { useState } from 'react';
+
 function Checkout() {
     const router=useRouter()
+
    return (
     <div className="w-[92%] md:w-[80%] mx-auto py-10 relative">
      <BackButton/>

@@ -6,11 +6,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CheckoutMap from "./CheckoutMap";
 import axios from "axios";
-import Checkout2 from "./Checkout2";
+import { setReduxPosition,setReduxAddress } from "@/redux/checkoutSlice";
+
+
 function CheckoutForm() {
+
   const {userData}=useSelector((state:RootState)=>state.user)
   const [searchLoading,setSearchLoading]=useState(false)
+  const dispatch=
+
   const [searchQuery,setSearchQuery]=useState("")
+
   const [address,setAddress]=useState({
         fullName: "",
         mobile: "",
@@ -20,6 +26,11 @@ function CheckoutForm() {
         fullAddress: ""
   })
   const [position,setPosition]=useState<[number,number] | null>(null)
+
+  useEffect(()=>{
+    
+  },[position])
+
 
   useEffect(()=>{
     if(navigator.geolocation){
