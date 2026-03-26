@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import EditRole from "@/components/EditRole";
 import Nav from "@/components/Nav";
 import UserDashboard from "../components/UserDashboard";
+import AdminDashboard from "@/components/AdminDashboard";
 export default async function Home() {
   await connectDB()
   const session=await auth();
@@ -20,7 +21,8 @@ export default async function Home() {
   return (
    <div>
     <Nav user={parsedUser}/>
-    <UserDashboard/>
+    {user.role=="user"?<UserDashboard/>:<AdminDashboard/>}
+    
    </div>
   );
 }

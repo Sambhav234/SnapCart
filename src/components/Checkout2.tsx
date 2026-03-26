@@ -4,19 +4,20 @@ import { CreditCard, CreditCardIcon, Truck } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import Grocery from "@/models/grocery.model";
-type Position=[number,number];
+import { useRouter } from "next/navigation";
 
-interface PosProp{
-  position:Position|null
-}
+
 
 
 function Checkout2() {
 
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "online">("cod");
   const {userData}=useSelector((state:RootState)=>state.user)
-
+  const {position,address}=useSelector((state:RootState)=>state.checkout)
+  const router=useRouter()
+  const { subTotal, deliveryFee, finalTotal, cartData } = useSelector(
+    (state: RootState) => state.cart,
+  );
 
   const handleCod=async ()=>{
     if(!position){
@@ -25,6 +26,8 @@ function Checkout2() {
     try{
       console.log(position)
       console.log(userData?._id)
+      console.log(address)
+
       const result=await axios.post('/api/user/order',{
         userId:userData?._id,
         items:cartData.map(item=>({
@@ -38,25 +41,66 @@ function Checkout2() {
         })),
         totalAmount:finalTotal,
         address:{
-          
-        }
+          fullName:address.fullName,
+          mobile:address.mobile,
+          city:address.city,
+          state:address.city,
+          pincode:address.pincode,
+          fullAddress:address.fullAddress,
+          latitude:position[0],
+          longitude:position[1]
+        },
+        paymentMethod
 
       })
+      console.log(result.data)
+      router.push("/user/order-success")
     }catch(err){
-
-      console.log("no position came")
+      console.log("Error sending details thorugh cod API",err)
     }
   }
 
-  const handleOnlinePayment=()=>{
-    
+  const handleOnlinePayment=async()=>{
+      if(!position){
+        return null
+    }
+    try {
+        const result=await axios.post("/api/user/payment",{
+        userId:userData?._id,
+        items:cartData.map(item=>(
+            {
+                grocery:item._id,
+                name:item.name,
+                price:item.price,
+                unit:item.unit,
+                quantity:item.quantity,
+                image:item.image
+            }
+        )),
+        totalAmount:finalTotal,
+        address:{
+            fullName:address.fullName,
+            mobile:address.mobile,
+            city:address.city,
+            state:address.state,
+            fullAddress:address.fullAddress,
+            pincode:address.pincode,
+            latitude:position[0],
+            longitude:position[1]
+        },
+        paymentMethod
+       })
+       console.log(result.data)
+       window.location.href=result.data.url
+    } catch (error) {
+        console.log("Payment API error :",error)
+    }
+
   }
 
 
 
-  const { subTotal, deliveryFee, finalTotal, cartData } = useSelector(
-    (state: RootState) => state.cart,
-  );
+
 
   return (
     <motion.div

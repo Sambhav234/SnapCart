@@ -1,8 +1,8 @@
 "use client"
 import { Building, Home, Loader2, LocateFixed, MapPin, Navigation, Phone, Search, User } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import {motion, number} from "motion/react"
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import CheckoutMap from "./CheckoutMap";
 import axios from "axios";
@@ -13,7 +13,7 @@ function CheckoutForm() {
 
   const {userData}=useSelector((state:RootState)=>state.user)
   const [searchLoading,setSearchLoading]=useState(false)
-  const dispatch=
+  const dispatch=useDispatch()
 
   const [searchQuery,setSearchQuery]=useState("")
 
@@ -28,8 +28,12 @@ function CheckoutForm() {
   const [position,setPosition]=useState<[number,number] | null>(null)
 
   useEffect(()=>{
-    
+    dispatch(setReduxPosition(position))
   },[position])
+  
+  useEffect(()=>{
+    dispatch(setReduxAddress(address))
+  })
 
 
   useEffect(()=>{

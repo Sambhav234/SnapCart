@@ -63,6 +63,10 @@ const orderSchema=new mongoose.Schema<IOrder>({
         default:"cod"
     },
     totalAmount:Number,
+    isPaid:{
+        type:Boolean,
+        default:false
+    },
     address:{
         fullName: String,
         mobile: String,

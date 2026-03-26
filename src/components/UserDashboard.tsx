@@ -12,6 +12,7 @@ import GroceryItemCard from './GroceryItemCard'
   const plainGrocery=JSON.parse(JSON.stringify(groceryList))
   return (
     <>
+    
        <HeroSection/>
        <CategorySlider/>
        <div className='w-[90%] md:w-[80%] mx-auto mt-10'>
