@@ -35,14 +35,15 @@ interface IOrder{
         latitude: number,
         longitude: number
     }
-    // assignment?: string
-    // assignedDeliveryBoy?: IUser
+    assignment?: string
+    assignedDeliveryBoy?: IUser
     status: "pending" | "out of delivery" | "delivered",
     createdAt?: Date
     updatedAt?: Date
 }
 
 function myOrder() {
+  
     const router=useRouter()
   const [orders,setOrders]=useState<IOrder[]>()
   const [loading,setLoading]=useState(true)

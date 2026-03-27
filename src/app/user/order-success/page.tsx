@@ -64,7 +64,7 @@ function OrderSuccess() {
        className='mt-12'
        >
        <Link
-       href={"/"}
+       href={"/user/my-orders"}
        >
         <motion.div
         whileHover={{ scale:1.04 }}

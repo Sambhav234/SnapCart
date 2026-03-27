@@ -7,6 +7,8 @@ import EditRole from "@/components/EditRole";
 import Nav from "@/components/Nav";
 import UserDashboard from "../components/UserDashboard";
 import AdminDashboard from "@/components/AdminDashboard";
+import DeliveryBoy from "@/components/DeliveryBoy";
+import GeoUpdater from "@/components/GeoUpdater";
 export default async function Home() {
   await connectDB()
   const session=await auth();
@@ -21,7 +23,8 @@ export default async function Home() {
   return (
    <div>
     <Nav user={parsedUser}/>
-    {user.role=="user"?<UserDashboard/>:<AdminDashboard/>}
+    <GeoUpdater userId={parsedUser._id}/>
+    {user.role=="user"?(<UserDashboard/>):user.role=="admin"?(<AdminDashboard/>):<DeliveryBoy/>}
     
    </div>
   );

@@ -4,7 +4,14 @@ import { Leaf,Truck,Smartphone, ShoppingBasket } from 'lucide-react'
 import { AnimatePresence } from 'motion/react'
 import {motion} from 'motion/react'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
+import { getSocket } from '@/lib/socket'
+
 function HeroSection() {
+
+  const {userData}=useSelector((state:RootState)=>state.user)
+
     
    const slides=[
       {

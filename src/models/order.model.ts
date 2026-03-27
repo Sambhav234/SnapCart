@@ -26,8 +26,8 @@ export interface IOrder{
         latitude: number,
         longitude: number
     }
-    // assignment?:mongoose.Types.ObjectId
-    // assignedDeliveryBoy?:mongoose.Types.ObjectId
+    assignment?:mongoose.Types.ObjectId
+    assignedDeliveryBoy?:mongoose.Types.ObjectId
     status:"pending" | "out of delivery" | "delivered"
     createdAt?:Date
     updatedAt?:Date
