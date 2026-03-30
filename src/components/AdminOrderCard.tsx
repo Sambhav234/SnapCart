@@ -7,6 +7,7 @@ import Image from 'next/image'
 import axios from 'axios'
 
 import { IUser } from '@/models/user_model'
+import { getSocket } from '@/lib/socket'
 
 interface IOrder {
     _id?: string
@@ -58,7 +59,10 @@ function AdminOrderCard({ order }: { order: IOrder }) {
     }
 
     useEffect(()=>{
-      setStatus(order.status)
+        const socket=getSocket()
+        socket?.on("order-status-update",(data)=>{
+            setStatus(data.status)
+        })
     },[order])
   
     return (

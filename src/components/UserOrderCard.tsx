@@ -2,8 +2,10 @@
 import { CreditCard, MapPin, Truck } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { IUser } from "@/models/user_model";
 import ExpandedCard from "./ExpandedCard";
+import { getSocket } from "@/lib/socket";
 
 export interface IOrder {
   _id?: string;
@@ -31,8 +33,8 @@ export interface IOrder {
     latitude: number;
     longitude: number;
   };
-  // assignment?: string
-  // assignedDeliveryBoy?: IUser
+  assignment?: string
+  assignedDeliveryBoy?: IUser
   status: "pending" | "out of delivery" | "delivered";
   createdAt?: Date;
   updatedAt?: Date;
@@ -54,6 +56,14 @@ function UserOrderCard({ order }: { order: IOrder }) {
         return "bg-gray-100 text-gray-600 border-gray-300";
     }
   };
+
+  useEffect(()=>{
+      const socket=getSocket()
+      socket?.on("order-status-update",(data)=>{
+        setStatus(data.status)
+      })
+      return ()=>{socket.off("order-status-update")}
+  },[order])
 
   return (
   <motion.div

@@ -1,9 +1,10 @@
 import React from 'react'
+import DeliveryBoyDashboard from './DeliveryBoyDashboard'
 
 function DeliveryBoy() {
   return (
-    <div>
-      Hii this isDelivery boys page
+    <div className='flex flex-row items-center justify-center h-screen'>
+      <DeliveryBoyDashboard/>
     </div>
   )
 }

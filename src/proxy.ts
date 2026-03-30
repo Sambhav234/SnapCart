@@ -12,7 +12,7 @@ export async function  proxy(req:NextRequest){
 
     const session=await auth()
     
-    if(!session){
+    if(!session || !session.user){
       const loginUrl=new URL("/login",req.url)
        loginUrl.searchParams.set("callbackUrl",req.url)
        return NextResponse.redirect(loginUrl)

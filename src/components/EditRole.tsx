@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {motion} from 'motion/react'
 import { Bike, User, UserCog } from 'lucide-react'
 import axios from 'axios'
@@ -22,6 +22,18 @@ function EditRole() {
         console.log(result.data)
         redirect("/")
     }
+
+
+    useEffect(()=>{
+        const handleadmin=async ()=>{
+            const res=await axios.get("/api/checkforadmin");
+            if(res.data.adminExist){
+                const roles=role.filter(r=>!(r.id=="admin"))
+                setrole(roles)
+            }
+        }
+        handleadmin()
+    },[])
   return (
 
     <div className="flex flex-col 

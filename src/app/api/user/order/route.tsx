@@ -1,4 +1,5 @@
 import connectDB from "@/lib/db";
+import emitEventHandler from "@/lib/emitEventHandler";
 import Order from "@/models/order.model";
 import User from "@/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
@@ -25,6 +26,10 @@ export async function POST(req:NextRequest){
         address
     }
     )
+    console.log("sending event Handler....")
+    await emitEventHandler("new-order",newOrder)
+    console.log("Event Handler Sent...")
+
 
     return NextResponse.json(
         newOrder,

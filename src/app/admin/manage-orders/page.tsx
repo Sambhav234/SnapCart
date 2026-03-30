@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { ArrowLeft } from 'lucide-react'
 import AdminOrderCard from '@/components/AdminOrderCard'
+import { getSocket } from '@/lib/socket'
 interface IOrder {
     _id?: string
     user: string
@@ -53,6 +54,16 @@ function ManageOrders() {
         }
       }
       getOrders()
+    },[])
+
+    useEffect(()=>{
+        const socket=getSocket()
+        console.log("Receiving in Admin dashboard ....")
+        socket?.on("new-order",(newOrder)=>{
+            console.log("new order socket working....")
+            setOrders((prev)=>[newOrder,...prev!])
+        })
+        return ()=> {socket.off("new-order")}
     },[])
 
 

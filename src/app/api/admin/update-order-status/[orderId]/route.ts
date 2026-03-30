@@ -3,6 +3,7 @@ import DeliveryAssignment from "@/models/deliveryassignment";
 import User from "@/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import Order from "@/models/order.model";
+import emitEventHandler from "@/lib/emitEventHandler";
 
 export async function POST(
   req: NextRequest,
@@ -34,7 +35,7 @@ export async function POST(
     if (status === "out of delivery" && !order.assignment) {
       const { latitude, longitude } = order.address;
       const nearByDeliveryBoys = await User.find({
-        role: "deliveryBoy",
+        role: "deliveryboy",
         location: {
           $near: {
             $geometry: {
@@ -71,6 +72,8 @@ export async function POST(
       if (candidates.length == 0) {
         await order.save();
 
+        await emitEventHandler("order-status-update",{orderId:order._id,status:order.status})
+
         return NextResponse.json(
           {
             message: "there is no available Delivery Boys",
@@ -92,6 +95,13 @@ export async function POST(
 
       await deliveryAssignment.populate("order");
 
+      for(const boyid of candidates){
+        const boy=await User.findById(boyid)
+        if(boy.socketId){
+          await emitEventHandler("new-assignment",deliveryAssignment,boy.socketId)
+        }
+      }
+
       order.assignment = deliveryAssignment._id;
       deliveryBoysPayload = availableDeliveryBoys.map((b) => ({
         id: b._id,
@@ -101,6 +111,8 @@ export async function POST(
         longitude: b.location.coordinates[0],
       }));
       await deliveryAssignment.populate("order");
+
+      
     }
 
       console.log("Delivery Payload Created , ready to send")
@@ -108,6 +120,7 @@ export async function POST(
 
     await order.save();
     await order.populate("user");
+    await emitEventHandler("order-status-update",{orderId:order._id,status:order.status})
     return NextResponse.json(
       {
         assignment: order.assignment?._id,
