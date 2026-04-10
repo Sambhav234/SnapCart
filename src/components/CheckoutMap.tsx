@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import "leaflet/dist/leaflet.css"
+// import "leaflet/dist/leaflet.css"
 import {MapContainer,Marker,TileLayer,useMap} from 'react-leaflet'
 import L,{ LatLngExpression } from 'leaflet'
 

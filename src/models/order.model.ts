@@ -77,6 +77,16 @@ const orderSchema=new mongoose.Schema<IOrder>({
         latitude: Number,
         longitude: Number
     },
+     assignment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "DeliveryAssignment",
+        default:null
+    },
+
+    assignedDeliveryBoy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     status:{
         type:String,
         enum:["pending","out of delivery","delivered"],
@@ -87,3 +97,14 @@ const orderSchema=new mongoose.Schema<IOrder>({
 
 const Order=mongoose.models.Order || mongoose.model("Order",orderSchema)
 export default Order
+
+ //  INCASE YOU CHANGE THE MODEL MIDWAY THEN USE THE BELOW ONE TO DELETE THE 
+ // CACHED MODEL AND CREATE NEW ONE
+
+// // Delete stale cache before re-registering
+// if (mongoose.models.Order) {
+//   delete mongoose.models.Order
+// }
+
+// const Order = mongoose.model("Order", orderSchema)
+// export default Order
