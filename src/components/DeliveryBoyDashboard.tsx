@@ -6,6 +6,7 @@ import { error } from "console";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import LiveMap from "@/components/LiveMap";
+import DeliveryChat from "./DeliveryChat";
 
 interface ILocation {
   latitude: number;
@@ -14,7 +15,7 @@ interface ILocation {
 
 function DeliveryBoyDashboard() {
   const [assignments, setAssignments] = useState<any[]>([]);
-  const userData = useSelector((state: RootState) => state.user);
+  const {userData} = useSelector((state: RootState) => state.user);
 
   const [activeOrder, setActiveOrder] = useState<any>(null);
   const [userLocation, setUserLocation] = useState<ILocation>({
@@ -73,6 +74,7 @@ function DeliveryBoyDashboard() {
 useEffect(():any=>{
 const socket=getSocket()
 socket.on("update-deliveryBoy-location",({userId,location})=>{
+  console.log("Location : ",location)
   setDeliveryBoyLocation({
     latitude:location.coordinates[1],
     longitude:location.coordinates[0]    
@@ -101,7 +103,7 @@ return ()=>socket.off("update-deliveryBoy-location")
   if (activeOrder && userLocation) {
     return (
       <div className="p-4 pt-30 min-h-screen bg-gray-50">
-        <div className="max-w-3xl mx-auto md:w-xl">
+        <div className="max-w-3xl mx-auto md:w-xl sm:w-xl">
           <h1 className="text-2xl font-bold text-green-700 mb-2">
             Active Delivery
           </h1>
@@ -114,6 +116,7 @@ return ()=>socket.off("update-deliveryBoy-location")
               deliveryBoyLocation={deliveryBoyLocation}
             />
           </div>
+          <DeliveryChat orderId={activeOrder.order._id} deliveryBoyId={userData?._id?.toString()!}/>
         </div>
       </div>
     );

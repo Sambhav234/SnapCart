@@ -4,7 +4,7 @@ import { auth } from "./auth"
 export async function  proxy(req:NextRequest){
 
     const {pathname}=req.nextUrl
-    const publicRoutes=["/login","/register","/api/auth","/api/user/stripe/webhook","/api/socket/connect","/api/socket/update-location"]
+    const publicRoutes=["/login","/register","/api/auth","/api/user/stripe/webhook","/api/socket/connect","/api/socket/update-location","/api/chat/save"]
 
     if(publicRoutes.some((path)=>pathname.startsWith(path))){
         return NextResponse.next()
