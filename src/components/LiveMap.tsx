@@ -1,6 +1,6 @@
 
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // import "leaflet/dist/leaflet.css"
 
@@ -14,7 +14,7 @@ interface Iprops{
     deliveryBoyLocation:ILocation
 }
 import L,{LatLngExpression} from "leaflet"
-import { MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from 'react-leaflet'
 // here L is globol namespace and entry point 
 // object for using all the functionalities of
 // our Leaflet
@@ -30,6 +30,18 @@ function LiveMap({userLocation,deliveryBoyLocation}:Iprops) {
         iconSize: [45, 45]
     })
 
+    function Recenter({positions}:{positions:[number,number]}){
+   const map=useMap()
+useEffect(()=>{
+if(positions[0]!==0 && positions[1]!==0){
+    map.setView(positions,map.getZoom(),{
+        animate:true
+    })
+}
+},[positions,map])
+    return null
+}
+
     const linePositions=
         deliveryBoyLocation && userLocation
         ?
@@ -44,7 +56,7 @@ function LiveMap({userLocation,deliveryBoyLocation}:Iprops) {
   return (
      <div className='w-full h-100 rounded-xl overflow-hidden shadow relative z-2'>
             <MapContainer center={center as any} zoom={13} scrollWheelZoom={true} className="w-full h-full">
-                {/* <Recenter positions={center as any}/> */}
+                <Recenter positions={center as any}/>
                 <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
